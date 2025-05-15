@@ -1,47 +1,87 @@
 <script setup>
-import { reactive, watch } from "vue";
+import { ref, onMounted } from "vue";
 
-const inventario = reactive([
-  { nombre: "Camiseta", precio: 20, stock: 5, disponible: true },
-  { nombre: "Sudadera", precio: 40, stock: 0, disponible: false },
-  { nombre: "Gorra", precio: 15, stock: 3, disponible: true },
-  { nombre: "Pantalón Vaquero", precio: 50, stock: 2, disponible: true },
-  { nombre: "Abrigo", precio: 80, stock: 4, disponible: true },
-  { nombre: "Pijama", precio: 30, stock: 1, disponible: true },
-  { nombre: "Zapatillas", precio: 60, stock: 3, disponible: true },
-  { nombre: "Bufanda", precio: 25, stock: 0, disponible: false },
-  { nombre: "Reloj", precio: 120, stock: 5, disponible: true }
-]);
+const inventario = ref([]);
+const API_URL = "http://127.0.0.1:5000/"
 
-watch(
-  inventario,
-  (nuevosProductos) => {
-    nuevosProductos.forEach((producto) => {
-      producto.disponible = producto.stock > 0;
-    });
-  },
-  { deep: true }
-);
+const cargarInventario = async () => {
+  const query = `
+    query {
+      productos {
+        id
+        nombre
+        precio
+        stock
+        disponible
+      }
+    }
+  `;
 
-const venderProducto = (producto) => {
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({query}),
+  });
+
+  const result = await response.json();
+  inventario.value = result.data.productos;
+};
+
+const venderProducto = async (producto) => {
   if (producto.stock > 0) {
-    producto.stock--;
+    const mutation = `
+      mutation {
+        venderProducto(id: ${producto.id}) {
+          producto {
+            id
+            stock
+            disponible
+          }
+        }
+      }
+    `;
+    await fetch(API_URL, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({query: mutation}),
+  });
+  await cargarInventario();
   }
 };
 
-const reponerProducto = (producto) => {
-  producto.stock++;
+const reponerProducto = async (producto) => {
+  const mutation = `
+    mutation {
+      reponerProducto(id: ${producto.id}) {
+        producto {
+          id
+          stock
+          disponible
+        }
+      }
+    }
+  `;
+  await fetch(API_URL, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({query: mutation}),
+  });
+  await cargarInventario();
 };
+
+onMounted(() => {
+  cargarInventario();
+});
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-100 text-gray-900 flex flex-col">
     <header class="bg-white shadow-md px-6 py-4">
-      <h1 class="text-2xl font-semibold">Gestión de Inventario</h1>
+      <h1 class="text-2xl font-semibold">Gestión de inventario</h1>
     </header>
 
     <main class="flex-grow container mx-auto px-6 py-8">
-      <h2 class="text-xl font-semibold mb-4">Lista de Productos</h2>
+      <h2 class="text-xl font-semibold mb-4">Lista de productos</h2>
 
       <div class="overflow-x-auto bg-white shadow-md rounded-lg">
         <table class="w-full text-left border-collapse">
