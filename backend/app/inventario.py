@@ -1,5 +1,4 @@
-inventario = [
-    
+inventario = [ 
     {"id": 1, "nombre": "Camiseta", "precio": 20.0, "stock": 5, "disponible": True},
     {"id": 2, "nombre": "Sudadera", "precio": 40.0, "stock": 0, "disponible": False},
     {"id": 3, "nombre": "Gorra", "precio": 15.0, "stock": 3, "disponible": True},
