@@ -89,3 +89,25 @@ Con el servidor arrancado, accede a la carpeta `test` y ejecuta el siguiente com
 ```bash
 python test.py
 ```
+
+## Probar API completa (backend + frontend)
+
+1. Inicializa el backend.
+
+```bash
+python run.py
+```
+
+2. Instala las dependencias del frontend.
+
+```bash
+npm install
+```
+
+3. Inicializa el frontend.
+
+```bash
+npm run dev
+```
+
+4. Entra en la URL que te da el frontend y empieza a probar la API.

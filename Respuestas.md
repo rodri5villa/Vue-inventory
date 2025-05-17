@@ -1,16 +1,14 @@
 ## 1. ¿Qué ventajas ofrece GraphQL sobre REST en este contexto?
 
   - Permite obtener solo los campos que realmente necesitamos, sin recibir información innecesaria.
-
   - Reduce la cantidad de llamadas al servidor, ya que 
     permite consultar todo en una única petición.
-
   - Mejora la eficiencia en el consumo de datos entre backend y frontend, sobre todo para interfaces dinámicas.
 
 ## 2. ¿Cómo se definen los tipos y resolvers en una API con GraphQL?
 
   - Los tipos se definen creando clases que heredan `graphene.ObjectType`, especificando sus campos y tipos de datos.
-    - Ejemplo: el tipo `Producto` tiene campos `id`, `nombre`, `stock` y `disponible`.
+    - Ejemplo: el tipo `Producto` tiene campos `id`, `nombre`, `precio`, `stock` y `disponible`.
 
   - Los resolvers son métodos que permiten obtener o modificar datos:
     - Para consultas (`Query`), se crean métodos como `resolve_productos`.
